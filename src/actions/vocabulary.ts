@@ -11,10 +11,23 @@ export async function saveCard(user: SelectUser, front: string, back: string) {
   })
 }
 
-export async function listCards(user: SelectUser) {
-  return db.select().from(vocabularyCardsTable).where(eq(vocabularyCardsTable.userId, user.id));
+export async function findUserById(userId: number): Promise<SelectUser> {
+  const user = await db.query.usersTable.findFirst({where: eq(usersTable.id, userId)});
+  if (!user) {
+    throw new Error(`User not found: ${userId}`);
+  }
+  return user;
 }
 
-export async function getUser(userId: number) {
-  return db.query.usersTable.findFirst({where: eq(usersTable.id, userId)});
+export async function findUserByName(userName: string): Promise<SelectUser> {
+  const user = await db.query.usersTable.findFirst({where: eq(usersTable.name, userName)});
+  if (!user) {
+    throw new Error(`User not found: ${userName}`);
+  }
+  return user;
+}
+  
+
+export async function listCards(user: SelectUser) {
+  return db.select().from(vocabularyCardsTable).where(eq(vocabularyCardsTable.userId, user.id));
 }

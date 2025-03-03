@@ -5,10 +5,17 @@ import { usersTable, vocabularyCardsTable } from './db/schema';
 import { isNull, eq } from 'drizzle-orm';
 
 async function main() {
-  const user1 = await vocabulary.getUser(1);
-  const words = await vocabulary.listCards(user1!);
+  const usersWithWords = await db.query.usersTable.findFirst({
+    with: {
+      words: true
+    }
+  })
+  console.log(usersWithWords);
+
+  // const user1 = await vocabulary.getUser(1);
+  // const words = await vocabulary.listCards(user1!);
   
-  console.log(words);
+  // console.log(words);
 
   const usersWithoutCards = await db
     .select()
